@@ -1,18 +1,40 @@
-import { Picture } from "../interfaces/Picture";
+import React, { useMemo } from "react";
+import { usePictures } from "../hooks/UsePictures";
 import css from './ImageGallery.module.css';
+import { Picture } from "../interfaces/Picture";
 
-export const ImageGallery = ({ images, handleImageClick, onImageLoad }: 
-    { images: Picture[], handleImageClick: (image: Picture) => void, onImageLoad: () => void }) => {
+const ImageItem = React.memo(({ picture, handlePictureClick, onLoad }: { picture: Picture, handlePictureClick: (image: Picture) => void, onLoad: () => void }) => {
+    return (
+        <li key={picture.webformatURL} className={css.ImageGalleryItem} onClick={() => handlePictureClick(picture)}>
+            <img src={picture.webformatURL} alt={picture.tags} onLoad={onLoad} className={css.ImageGalleryItemImage} />
+        </li>
+    );
+});
+
+export const ImageGallery = React.memo(() => {
+    
+    const { pictures, setLoadedImages, handlePictureClick } = usePictures();
+
+    const handleImageLoad = () => {
+        setLoadedImages(prev => prev + 1);
+    };
+
+    const imageItems = useMemo(() => {
+        return pictures.map(picture => (
+            <ImageItem
+                key={picture.webformatURL}
+                picture={picture}
+                handlePictureClick={handlePictureClick}
+                onLoad={handleImageLoad}
+            />
+        ));
+    }, [pictures, handlePictureClick]);
     
     return (
-        <>
+        <div>
             <ul className={css.ImageGallery}>
-                {images.map(image => (
-                    <li key={image.webformatURL} className={css.ImageGalleryItem} onClick={() => handleImageClick(image)}>
-                        <img src={image.webformatURL} alt={image.tags} onLoad={onImageLoad} className={css.ImageGalleryItemImage} />
-                    </li>
-                ))}
+                {imageItems}
             </ul>
-        </>
-    )   
-}
+        </div>
+    );
+});
