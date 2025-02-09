@@ -1,24 +1,26 @@
-import { useState } from "react";
 import toast, { Toaster } from 'react-hot-toast';
 import css from './SearchBar.module.css';
+import { usePictures } from "../hooks/UsePictures";
+import { useState } from 'react';
 
 
-export const SearchBar = ({ onSubmit }: { onSubmit: (query: string) => void }) => {
-    const [query, setQuery] = useState('');
-    
+export const SearchBar = () => {
+    const { setQuery } = usePictures();
+    const [userQuery, setUserQuery] = useState('');
+
     const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setQuery(e.target.value);
+      setUserQuery(e.target.value);
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = e.currentTarget;
-        if (query.trim() === "") { 
+        if (userQuery.trim() === "") { 
             toast.error('Please enter a search query', { duration: 2000 });
             return;
         }  
-        onSubmit(query);
-        setQuery('');
+        setQuery(userQuery);
+        setUserQuery('');
         form.reset();
     };
 
