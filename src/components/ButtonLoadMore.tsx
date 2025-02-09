@@ -1,7 +1,13 @@
+import { usePictures } from '../hooks/UsePictures';
 import css from './ButtonLoadMore.module.css'
 
-export const ButtonLoadMore = ({ onClick }: { onClick: () => void }) => {
+export const ButtonLoadMore = () => {
+
+    const {setPage} = usePictures();
+
     return (
-        <button onClick={onClick} className={css.Button}>Load more</button>
+        <div>
+            <button onClick={() => setPage(prevPage => prevPage + 1)} className={css.Button}>Load more</button>
+        </div>
     )
 }
