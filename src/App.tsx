@@ -1,14 +1,26 @@
-import './App.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { SearchPicturesApiCall } from './components/SearchPicturesApiCall';
+import css from './App.module.css'
+import { usePictures } from "./hooks/UsePictures";
+import { SearchBar } from "./components/SearchBar";
+import { ImageGallery } from "./components/ImageGallery";
+import { ButtonLoadMore } from "./components/ButtonLoadMore";
+import { Spinner } from './components/Spinner';
+
 
 function App() {
-  const queryClient = new QueryClient();
+
+  const { isMorePictures, loading, isGalleryLoading, picturesEndRef, data, error} = usePictures();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SearchPicturesApiCall />
-    </QueryClientProvider>
+    <>
+      <SearchBar />
+      <div className={css.App}>
+        {error && <p>Error</p>}
+        {data && <ImageGallery />}
+        {(loading || isGalleryLoading) && <Spinner/>}  
+        <div ref={picturesEndRef}></div>
+        {data && !loading && !isGalleryLoading && !error && isMorePictures && <ButtonLoadMore />}
+      </div>
+    </>
   )
 }
 
