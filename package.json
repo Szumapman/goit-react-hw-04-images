@@ -1,5 +1,5 @@
 {
-  "name": "goit-react-hw-03-image-finder",
+  "name": "goit-react-hw-04-images",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,7 +11,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
-  "homepage": "https://szumapman.github.io/goit-react-hw-03-image-finder/",
+  "homepage": "https://szumapman.github.io/goit-react-hw-04-images/",
   "dependencies": {
     "@tanstack/react-query": "^5.66.0",
     "axios": "^1.7.9",
