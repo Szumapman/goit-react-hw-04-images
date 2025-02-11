@@ -1,11 +1,9 @@
 import toast, { Toaster } from 'react-hot-toast';
 import css from './SearchBar.module.css';
-import { usePictures } from "../hooks/UsePictures";
 import { useState } from 'react';
 
 
-export const SearchBar = () => {
-    const { setQuery } = usePictures();
+export const SearchBar = ({ onSubmit }: { onSubmit: (query: string) => void }) => {
     const [userQuery, setUserQuery] = useState('');
 
     const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +17,7 @@ export const SearchBar = () => {
             toast.error('Please enter a search query', { duration: 2000 });
             return;
         }  
-        setQuery(userQuery);
+        onSubmit(userQuery);
         setUserQuery('');
         form.reset();
     };
