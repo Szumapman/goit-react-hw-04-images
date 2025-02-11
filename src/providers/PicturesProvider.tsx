@@ -7,7 +7,6 @@ import * as basicLightbox from 'basiclightbox';
 import 'basiclightbox/dist/basicLightbox.min.css';
 import { PicturesContext } from "../interfaces/PicturesContextType";
 
-
 export const PicturesProvider = ({ children }: { children: React.ReactNode }) => {
     const [query, setQuery] = useState('');
     const [page, setPage] = useState(1);
@@ -34,22 +33,18 @@ export const PicturesProvider = ({ children }: { children: React.ReactNode }) =>
     }, [query, page, refetch]);
 
     useEffect(() => {
-        setPictures([]);
-        setPage(1);
-        setIsMorePictures(false);
-        setLoading(false);
-    }, [query]);
+        if (page === 1) {
+            setPictures([]);
+            setLoadedImages(0);
+        }
+    }, [query, page]);
 
     useEffect(() => {
         if (data && !error) {
-            if (page === 1) {
-                setPictures(data.hits);
-            } else {
-                setPictures(prevPictures => {
-                    const newPictures = [...prevPictures, ...data.hits];
-                    return newPictures;
-                });
-            }
+            setPictures(prevPictures => {
+                const newPictures = data.hits.filter((picture: { id: number; }) => !prevPictures.some(prev => prev.id === picture.id));
+                return [...prevPictures, ...newPictures];
+            });
             setIsMorePictures(page * perPage < data.totalHits);
             setLoading(false);
             if (data.hits.length === 0) {
@@ -59,9 +54,10 @@ export const PicturesProvider = ({ children }: { children: React.ReactNode }) =>
     }, [data, error]);
 
     useEffect(() => {
+        console.log(loadedImages, pictures.length);
         if (loadedImages === pictures.length && loadedImages !== 0) {
             setIsGalleryLoading(false);
-            setLoadedImages(0);
+            // setLoadedImages(0);
             if (picturesEndRef.current) {
                 picturesEndRef.current.scrollIntoView({ behavior: 'smooth' });
             }
@@ -118,8 +114,8 @@ export const PicturesProvider = ({ children }: { children: React.ReactNode }) =>
 
     return (
         <PicturesContext.Provider value={value}>
-            <Toaster position="top-right" reverseOrder={false} />
-            <>{children}</>
+            {/* <Toaster position="top-right" reverseOrder={false} /> */}
+            {children}
         </PicturesContext.Provider>
-    )   
-}
+    );
+};
