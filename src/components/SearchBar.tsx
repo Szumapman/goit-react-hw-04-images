@@ -29,7 +29,7 @@ export const SearchBar = () => {
             <Toaster position="top-right" reverseOrder={false} />
 
             <header className={css.Searchbar}>
-                <form className={css.SearchForm} onSubmit={handleSubmit}>
+                <form className={css.SearchForm} onSubmit={handleSubmit} id="search-form">
                     <button type="submit" className={css.SearchFormButton}>
                         <span className={css.SearchFormButtonLabel}>Search</span>
                     </button>
